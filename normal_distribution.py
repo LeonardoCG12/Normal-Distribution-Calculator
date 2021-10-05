@@ -139,21 +139,40 @@ def getVars():
 
 
 def getValue(z):
+    
+    print("Left side: 1\nRight side: 2")
+    side = int(input("Option: "))
 
-    if float(z) >= 0.00:
-        if float(z) > 3.62:
-            value = "100"
-        else:    
-            zscore = json.loads(dist.ztable)
-            value = f"{float(zscore[z]) * 100:.2f}"
-    else:
-        if float(z) < -3.62:
-            value = "0"
+    if side == 1:
+        if float(z) >= 0.00:
+            if float(z) > 3.62:
+                value = "100"
+            else:    
+                zscore = json.loads(dist.ztable)
+                value = f"{float(zscore[z]) * 100:.2f}"
         else:
-            z = f"{abs(float(z)):.2f}"
-            zscore = json.loads(dist.ztable)
-            value = f"{(1 - float(zscore[z])) * 100:.2f}"
-            z = f"-{z}"
+            if float(z) < -3.62:
+                value = "0"
+            else:
+                z = f"{abs(float(z)):.2f}"
+                zscore = json.loads(dist.ztable)
+                value = f"{(1 - float(zscore[z])) * 100:.2f}"
+                z = f"-{z}"                
+    elif side == 2:
+        if float(z) >= 0.00:
+            if float(z) > 3.62:
+                value = "0"
+            else:
+                zscore = json.loads(dist.ztable)
+                value = f"{(1 - float(zscore[z])) * 100:.2f}"
+        else:
+            if float(z) < -3.62:
+                value = "100"
+            else:
+                z = f"{abs(float(z)):.2f}"
+                zscore = json.loads(dist.ztable)
+                value = f"{float(zscore[z]) * 100:.2f}"
+                z = f"-{z}"
 
     return z, value
 
