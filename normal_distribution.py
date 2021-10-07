@@ -129,57 +129,106 @@ class Vars:
                        }"
 
 
-def getVars():
+def getVars(n):
     m = float(input("mean: "))
     s = float(input("std: "))
-    x = float(input("value: "))
-    z = f"{(x - m)/s:.2f}"
 
-    return z
+    if n == 1 or n == 2:
+        x = float(input("value: "))
+        z = f"{(x - m)/s:.2f}"
+
+        return z
+
+    elif n == 3:
+        x1 = float(input("Left value: "))
+        x2 = float(input("Right value: "))
+        z1 = f"{(x1 - m)/s:.2f}"
+        z2 = f"{(x2 - m)/s:.2f}"
+
+        return z1, z2
 
 
-def getValue(z):
-    
-    print("Left side: 1\nRight side: 2")
-    side = int(input("Option: "))
+def getValue():
+    print("Left side: 1")
+    print("Right side: 2")
+    print("Between: 3")
+    n = int(input("Option: "))
+    zscore = json.loads(dist.ztable)
 
-    if side == 1:
+    if n == 1:
+        z = getVars(n)
+
         if float(z) >= 0.00:
             if float(z) > 3.62:
                 value = "100"
             else:    
-                zscore = json.loads(dist.ztable)
                 value = f"{float(zscore[z]) * 100:.2f}"
         else:
             if float(z) < -3.62:
                 value = "0"
             else:
                 z = f"{abs(float(z)):.2f}"
-                zscore = json.loads(dist.ztable)
                 value = f"{(1 - float(zscore[z])) * 100:.2f}"
-                z = f"-{z}"                
-    elif side == 2:
+                z = f"-{z}"
+
+        print(f"z = {z}")
+        print(f"P(x) = {value}%")
+
+    elif n == 2:
+        z = getVars(n)
+
         if float(z) >= 0.00:
             if float(z) > 3.62:
                 value = "0"
             else:
-                zscore = json.loads(dist.ztable)
                 value = f"{(1 - float(zscore[z])) * 100:.2f}"
         else:
             if float(z) < -3.62:
                 value = "100"
             else:
                 z = f"{abs(float(z)):.2f}"
-                zscore = json.loads(dist.ztable)
                 value = f"{float(zscore[z]) * 100:.2f}"
                 z = f"-{z}"
 
-    return z, value
+        print(f"z = {z}")
+        print(f"P(x) = {value}%")
+
+    elif n == 3:
+        z = getVars(n)
+        z1 = z[0]
+        z2 = z[1]
+
+        if float(z1) > 3.62 and float(z2) > 3.62:
+            value = "100"
+        elif float(z1) == 0.00 and float(z2) == 0.00:
+            value = "0"
+        else:
+            if float(z1) < 0.00 and float(z2) < 0.00:
+                z1 = f"{abs(float(z1)):.2f}"
+                z2 = f"{abs(float(z2)):.2f}"
+                value1 = (1 - float(zscore[z1])) * 100
+                value2 = (1 - float(zscore[z2])) * 100
+                z1 = f"-{z1}"
+                z2 = f"-{z2}"
+            elif float(z2) < 0.00:
+                z2 = f"{abs(float(z2)):.2f}"
+                value1 = (1 - float(zscore[z2])) * 100
+                value2 = float(zscore[z1]) * 100
+                z2 = f"-{z2}"
+            elif float(z1) < 0.00:
+                z1 = f"{abs(float(z1)):.2f}"
+                value1 = (1 - float(zscore[z1])) * 100
+                value2 = float(zscore[z2]) * 100
+                z1 = f"-{z1}"
+            else:
+                value1 = float(zscore[z1]) * 100
+                value2 = float(zscore[z2]) * 100
+
+        print(f"z1 = {z1}, z2 = {z2}")
+        print(f"P(x) = {float(value2) - float(value1):.2f}%")
 
 
 if __name__ == "__main__":
     dist = Vars()
-    output = getValue(getVars())
-    print(f"z = {output[0]}")
-    print(f"P(x) = {output[1]}%")
+    getValue()
 
