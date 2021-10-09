@@ -200,34 +200,46 @@ def getValue():
         z1 = z[0]
         z2 = z[1]
 
-        if float(z1) > 3.62 and float(z2) > 3.62:
-            value = "100"
-        elif float(z1) == 0.00 and float(z2) == 0.00:
-            value = "0"
-        else:
-            if float(z1) < 0.00 and float(z2) < 0.00:
-                z1 = f"{abs(float(z1)):.2f}"
-                z2 = f"{abs(float(z2)):.2f}"
-                value1 = (1 - float(dist.ztable[z1])) * 100
-                value2 = (1 - float(dist.ztable[z2])) * 100
-                z1 = f"-{z1}"
-                z2 = f"-{z2}"
-            elif float(z2) < 0.00:
-                z2 = f"{abs(float(z2)):.2f}"
-                value1 = (1 - float(dist.ztable[z2])) * 100
-                value2 = float(dist.ztable[z1]) * 100
-                z2 = f"-{z2}"
-            elif float(z1) < 0.00:
-                z1 = f"{abs(float(z1)):.2f}"
-                value1 = (1 - float(dist.ztable[z1])) * 100
-                value2 = float(dist.ztable[z2]) * 100
-                z1 = f"-{z1}"
+        if abs(float(z1)) > 3.62 and abs(float(z2)) > 3.62:
+
+            if float(z1) * float(z2) > 0.00:
+                value1="0"
+                value2="0"
             else:
-                value1 = float(dist.ztable[z1]) * 100
-                value2 = float(dist.ztable[z2]) * 100
+                value1 = "100"
+                value2 = "0"
+
+        elif float(z1) == 0.00 and float(z2) == 0.00:
+            value1 = "0"
+            value2 = "0"
+        elif float(z1) < 0.00 and float(z2) < 0.00:
+            z1 = f"{abs(float(z1)):.2f}"
+            z2 = f"{abs(float(z2)):.2f}"
+            value1 = (1 - float(dist.ztable[z1])) * 100
+            value2 = (1 - float(dist.ztable[z2])) * 100
+            z1 = f"-{z1}"
+            z2 = f"-{z2}"
+        elif float(z2) < 0.00:
+            z2 = f"{abs(float(z2)):.2f}"
+            value1 = (1 - float(dist.ztable[z2])) * 100
+            value2 = float(dist.ztable[z1]) * 100
+            z2 = f"-{z2}"
+        elif float(z1) < 0.00:
+            z1 = f"{abs(float(z1)):.2f}"
+
+            if float(z1) > 3.62:
+                value1 = -0.50
+            else:
+                value1 = (1 - float(dist.ztable[z1])) * 100
+            
+            value2 = float(dist.ztable[z2]) * 100
+            z1 = f"-{z1}"
+        else:
+            value1 = float(dist.ztable[z1]) * 100
+            value2 = float(dist.ztable[z2]) * 100
 
         print(f"z1 = {z1}, z2 = {z2}")
-        print(f"P(x) = {float(value2) - float(value1):.2f}%")
+        print(f"P(x) = {abs(float(value2) - float(value1)):.2f}%")
 
 
 if __name__ == "__main__":
