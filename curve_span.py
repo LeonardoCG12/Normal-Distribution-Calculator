@@ -7,7 +7,7 @@ def calculate_z_score(x: float, mean: float, std_dev: float) -> float:
 
 
 def main():
-    print("--- Normal Distribution Calculator ---")
+    print("------ CurveSpan ------")
     try:
         mean = float(input("Mean: "))
         std_dev = float(input("Standard Deviation: "))
