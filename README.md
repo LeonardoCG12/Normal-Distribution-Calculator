@@ -71,7 +71,7 @@ Clone the repository and run the script directly from your terminal:
 
 ```bash
 git clone https://github.com/LeonardoCG12/CurveSpan.git
-cd CurveSpan/
+cd CurveSpan
 python3 curve_span.py
 ```
 
